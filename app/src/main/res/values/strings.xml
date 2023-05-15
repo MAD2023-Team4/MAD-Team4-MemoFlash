@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Flashcards App Draft</string>
+    <string name="t1">ReFlash</string>
+    <string name="b1">Log in</string>
+    <string name="t2">Don\'t have an account?</string>
+    <string name="b3">Sign up</string>
+    <string name="p1">Password</string>
+
+
+    <string name="home1">Welcome, User! </string>
+    <string name="home2">Re-learn flash cards </string>
+    <string name="home3">Discover new things to learn </string>
+    <string name="toolbar1">Home</string>
+    <string name="toolbar5">Profile</string>
+
+    <string name="prompt">Click on the flashcard (in this case, word) to find out the answer. Think of the answer first before clicking! </string>
+    <string name="prev">Prev </string>
+    <string name="next">Next </string>
+
+    <string name="f1title">Singapore Social Studies Quiz</string>
+    <string name="q1">Who is the President of Singapore?</string>
+    <string name="a1">Mdm Halimah Yacob</string>
+    <string name="q2">When did Singapore gain independence? </string>
+    <string name="a2">1965</string>
+    <string name="q3">Who won the Gold Medal for Rio Olympics 2016?</string>
+    <string name="a3">Joseph Schooling</string>
+    <string name="q4">What is the name of the tallest building in Singapore?</string>
+    <string name="a4">Marina Bay Sands </string>
+
+    <string name="f2title">How well do you know NP? </string>
+
+    <string name="f3title">How to C sharp </string>
+
+    <string name="f4title">How well do you know Bryan? </string>
+
+    <string name="back">Back </string>
+</resources>
