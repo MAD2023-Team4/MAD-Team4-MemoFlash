@@ -56,9 +56,11 @@ public class FlashCard1 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (v == q1) {
+                    a1.setText(aList.get(currentIndex));
                     a1.setVisibility(View.VISIBLE);
                     q1.setVisibility(View.GONE);
                 }
+
 
             }
         });
@@ -67,6 +69,7 @@ public class FlashCard1 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (v == a1) {
+                    a1.setText(aList.get(currentIndex));
                     q1.setVisibility(View.VISIBLE);
                     a1.setVisibility(View.GONE);
                 }
