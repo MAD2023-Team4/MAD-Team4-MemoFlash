@@ -8,14 +8,13 @@ MemoFlash is a flashcards app-based tool that improves upon Spaced Repetition Sy
 - Home page - Displays all the default flashcards (Samuel)
 - Learn (flashcards page) - the user gets to learn concepts using flashcards. (Bryan)
 - Test - the user gets to access his/her own knowledge of the topic of choice. 
-- Multiple choice style - there will be multiple choice questions, and the user selects the correct answer. (John)
-- Recall answer with flashcards simply by clicking - after recalling the piece of information, the user clicks the flashcard to view the correct answer. If user gets it correct, he/she presses "I got it right", and if wrong, vice versa. (John)
-- Recall answer by typing answer out - the system will check if the answer typed out matches the correct answer. (Samuel)
+- Recall answer with flashcards simply by clicking - after recalling the piece of information, the user clicks on "prev" or "next" (John)
 - Profile page (Victoria)
 - App UI and logo (Victoria)
 
 ### Stage 2 - Proposed New Features:
  - Calculates the timing to review the flashcards (Samuel)
+ - Multiple choice style - there will be multiple choice questions, and the user selects the correct answer. (John)
  - Speedrun feature for users who want a challenge, and let them edit the time they have to answer (Hui Ting)
  - Information Depository for users to key in notes outside of the flashcards (Hui Ting)
  - Image Relaxation (Bryan)
