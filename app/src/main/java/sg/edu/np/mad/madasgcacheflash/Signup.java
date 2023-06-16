@@ -5,11 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.Random;
+
+
+import java.util.Random;
 
 public class Signup extends AppCompatActivity {
 
@@ -21,66 +27,140 @@ public class Signup extends AppCompatActivity {
     SharedPreferences sharedPreferences;
      */
 
+    private MyDBHandler myDBHandler;
+    private EditText etUsername;
+    private EditText etPassword;
+    private EditText etOTP;
+    private Button otpButton;
+    private Button createButton;
+    private Button cancelButton;
+    private int generatedOTP;
+    private CountDownTimer myCountDown;
+    private Toast otpToast; // Toast variable for OTP countdown
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        myDBHandler = new MyDBHandler(this, null);
     }
 
-    MyDBHandler myDBHandler = new MyDBHandler(this, null);
-    @Override
-    protected void onStart(){
-        super.onStart();
-        Log.i(title,"Starting Acct Creation");
+    private void generateAndDisplayOTP() {
+        generatedOTP = generateOTP();
+        Toast.makeText(Signup.this, "Generated OTP: " + generatedOTP, Toast.LENGTH_LONG).show();
+    }
 
-        EditText etUsername = findViewById(R.id.editTextText3);
-        EditText etPassword = findViewById(R.id.editTextText4);
-        Button createButton = findViewById(R.id.button3);
-        Button cancelButton = findViewById(R.id.button2);
+    private void createUser() {
+        String username = etUsername.getText().toString();
+        String password = etPassword.getText().toString();
+        String userOTP = etOTP.getText().toString();
 
-        createButton.setOnClickListener(new View.OnClickListener(){
+        User dbData = myDBHandler.findUser(username);
+        if (dbData != null) {
+            Toast.makeText(Signup.this, "Username Already Exists!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (userOTP.isEmpty()) {
+            Toast.makeText(Signup.this, "Enter a number!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int num = Integer.parseInt(userOTP);
+        if (num != generatedOTP) {
+            Toast.makeText(Signup.this, "Wrong OTP!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Add the user to the database if the OTP is correct
+        User dbUserData = new User(username, password);
+        myDBHandler.addUser(dbUserData);
+
+        Toast.makeText(Signup.this, "Account Created Successfully!", Toast.LENGTH_SHORT).show();
+
+        // Move back to the previous activity (MainActivity)
+        Intent intent = new Intent(Signup.this, Login.class);
+        startActivity(intent);
+    }
+
+    private int generateOTP() {
+        Random random = new Random();
+        return random.nextInt(900000) + 100000; // Generate a random 6-digit OTP
+    }
+
+    private void startCountdown() {
+        myCountDown = new CountDownTimer(20000, 1000) {
             @Override
-            public void onClick(View view){
-                /*
-                sharedPreferences = getSharedPreferences(GLOBAL_PREF,MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(MY_USERNAME, etUsername.getText().toString());
-                editor.putString(MY_PASSWORD, etPassword.getText().toString());
-                editor.commit();
-
-                Intent intent = new Intent(MainActivity2.this, MainActivity.class);
-                startActivity(intent);
-                */
-
-                User dbData = myDBHandler.findUser(etUsername.getText().toString());
-                if (dbData == null) {
-                    String dbUserName = etUsername.getText().toString();
-                    String dbPassword = etPassword.getText().toString();
-                    User dbUserData = new User(dbUserName, dbPassword);
-
-                    if (dbData.getUsername().equals(dbUserName)){
-                        Toast.makeText(Signup.this, "Username already exists!",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    myDBHandler.addUser(dbUserData);
-                    Toast.makeText(Signup.this, "Username created!",
-                            Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Signup.this, Login.class);
-                    startActivity(intent);
+            public void onTick(long l) {
+                if (otpToast != null) {
+                    otpToast.cancel(); // Cancel the previous toast message
                 }
-                else{
-                    Toast.makeText(Signup.this, "Username already exists, try another username!",
-                            Toast.LENGTH_SHORT).show();
+                otpToast = Toast.makeText(getApplicationContext(), "Your OTP will expire in: " + l / 1000 + " secs", Toast.LENGTH_SHORT);
+                otpToast.show();
+            }
+
+            @Override
+            public void onFinish() {
+                Log.v(title, "Countdown Finished!");
+                if (otpToast != null) {
+                    otpToast.cancel();
+                }
+            }
+        };
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(title, "Starting Acc Creation");
+
+        etUsername = findViewById(R.id.editTextText3);
+        etPassword = findViewById(R.id.editTextText4);
+        etOTP = findViewById(R.id.editTextText6);
+
+        otpButton = findViewById(R.id.button4);
+        createButton = findViewById(R.id.button3);
+        cancelButton = findViewById(R.id.button2);
+
+        otpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generateAndDisplayOTP();
+
+                etOTP.setText("");
+                startCountdown();
+                myCountDown.start();
+            }
+        });
+
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createUser();
+                if (otpToast != null) {
+                    otpToast.cancel();
                 }
             }
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener(){
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View v) {
                 Intent intent = new Intent(Signup.this, Login.class);
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (myCountDown != null) {
+            myCountDown.cancel();
+        }
+        if (otpToast != null) {
+            otpToast.cancel();
+        }
     }
 }
