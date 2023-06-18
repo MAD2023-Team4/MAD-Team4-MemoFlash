@@ -57,31 +57,37 @@ public class Signup extends AppCompatActivity {
         String userOTP = etOTP.getText().toString();
 
         User dbData = myDBHandler.findUser(username);
-        if (dbData != null) {
-            Toast.makeText(Signup.this, "Username Already Exists!", Toast.LENGTH_SHORT).show();
-            return;
+        if (!username.isEmpty() && !password.isEmpty())
+        {
+            if (dbData != null) {
+                Toast.makeText(Signup.this, "Username Already Exists!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (userOTP.isEmpty()) {
+                Toast.makeText(Signup.this, "Enter a number!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int num = Integer.parseInt(userOTP);
+            if (num != generatedOTP) {
+                Toast.makeText(Signup.this, "Wrong OTP!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            // Add the user to the database if the OTP is correct
+            User dbUserData = new User(username, password);
+            myDBHandler.addUser(dbUserData);
+
+            Toast.makeText(Signup.this, "Account Created Successfully!", Toast.LENGTH_SHORT).show();
+
+            // Move back to the previous activity (MainActivity)
+            Intent intent = new Intent(Signup.this, Login.class);
+            startActivity(intent);
         }
 
-        if (userOTP.isEmpty()) {
-            Toast.makeText(Signup.this, "Enter a number!", Toast.LENGTH_SHORT).show();
-            return;
+        else{
+            Toast.makeText(Signup.this, "Please fill in both!", Toast.LENGTH_SHORT).show();
         }
-
-        int num = Integer.parseInt(userOTP);
-        if (num != generatedOTP) {
-            Toast.makeText(Signup.this, "Wrong OTP!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Add the user to the database if the OTP is correct
-        User dbUserData = new User(username, password);
-        myDBHandler.addUser(dbUserData);
-
-        Toast.makeText(Signup.this, "Account Created Successfully!", Toast.LENGTH_SHORT).show();
-
-        // Move back to the previous activity (MainActivity)
-        Intent intent = new Intent(Signup.this, Login.class);
-        startActivity(intent);
     }
 
     private int generateOTP() {

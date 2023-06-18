@@ -11,4 +11,7 @@
     <string name="cancelCreationText">Cancel</string>
 
     <string name="mainLandingPageTitle">Main Page</string>
+    <string name="otpText">OTP</string>
+    <string name="otpButton">Get OTP</string>
+
 </resources>
