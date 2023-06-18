@@ -24,8 +24,11 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     List<String> questions = new ArrayList<>();
     List<String> answers = new ArrayList<>();
+    List<String> currentQuestions = new ArrayList<>();
+    List<String> currentAnswers = new ArrayList<>();
     BottomNavigationView bottomNavigationView;
     //TextView cred = findViewById(R.id.welcome);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        //Unpacking flashcards from Questions list and Answers list
+        //__________________________________________________________________________________________
+
+
+
         //Call API
         //__________________________________________________________________________________________
 
@@ -84,7 +92,10 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                     else if (id == R.id.about){
-                        startActivity(new Intent(getApplicationContext(), Profile.class));
+                        String username = getIntent().getStringExtra("Username");
+                        Intent profileIntent = new Intent(MainActivity.this, Profile.class);
+                        profileIntent.putExtra("username", username);
+                        startActivity(profileIntent);
                         overridePendingTransition(0, 0);
                         return true;
                     }
